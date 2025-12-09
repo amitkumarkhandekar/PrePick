@@ -1,0 +1,288 @@
+.customer-orders, .no-orders {
+  padding: 20px 0;
+}
+
+.customer-orders h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.no-orders {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.no-orders h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.no-orders p {
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.browse-btn {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.browse-btn:hover {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+}
+
+.orders-list {
+  margin-top: 20px;
+}
+
+.order-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.order-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.order-header h3 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.order-date {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.status-badge {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-confirmed {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-ready {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.status-completed {
+  background: #e5e7eb;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.order-items {
+  margin: 20px 0;
+}
+
+.order-items h4 {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.order-items ul {
+  list-style: none;
+}
+
+.order-items li {
+  padding: 6px 0;
+  color: #555;
+}
+
+.order-summary {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 0.95rem;
+}
+
+.paid-amount {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.ready-by {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+  color: #667eea;
+  font-size: 1rem;
+}
+
+.pickup-alert {
+  background: #d4edda;
+  color: #155724;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-weight: 500;
+  text-align: center;
+}
+
+.order-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.call-shop-btn {
+  background: white;
+  border: 2px solid #10b981;
+  color: #10b981;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.call-shop-btn:hover {
+  background: #10b981;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .customer-orders h2 {
+    font-size: 1.6rem;
+  }
+
+  .order-card {
+    padding: 20px;
+  }
+
+  .order-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .order-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .status-badge {
+    align-self: flex-start;
+  }
+
+  .order-summary {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .customer-orders, .no-orders {
+    padding: 15px 0;
+  }
+
+  .customer-orders h2 {
+    font-size: 1.4rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .no-orders {
+    padding: 60px 15px;
+  }
+
+  .no-orders h2 {
+    font-size: 1.4rem;
+  }
+
+  .browse-btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+
+  .order-card {
+    padding: 15px;
+  }
+
+  .order-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .order-date {
+    font-size: 0.85rem;
+  }
+
+  .status-badge {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .order-items h4 {
+    font-size: 0.95rem;
+  }
+
+  .order-items li {
+    font-size: 0.9rem;
+  }
+
+  .summary-row {
+    font-size: 0.9rem;
+  }
+
+  .ready-by {
+    font-size: 0.95rem;
+  }
+
+  .call-shop-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}

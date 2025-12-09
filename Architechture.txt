@@ -1,0 +1,76 @@
+1. Customer Flow
+Customer Opens App
+        │
+        ▼
+  Login via Gmail (OTP later)
+        │
+        ▼
+Browse Nearby Shops (GPS)
+        │
+        ▼
+Select Shop → View Catalog
+        │
+        ▼
+Add Items to Cart
+        │
+        ▼
+Partial Payment via Google Pay
+        │
+        ▼
+Order Submitted → Shop Receives Order
+        │
+        ▼
+Shop Marks “Ready By” Time
+        │
+        ▼
+Push Notification: Order Ready
+        │
+        ▼
+Customer Picks Up Order
+        │
+        ▼
+Order History Updated / Favorites Saved
+
+2. Shop Flow
+Shop Onboarding
+        │
+        ▼
+Team Verifies Shop → Mark Verified in DB
+        │
+        ▼
+Upload Catalog
+  ├── Bulk Upload (Excel/CSV)
+  └── Manual Addition/Editing
+        │
+        ▼
+Receive Customer Order
+        │
+        ▼
+Set “Ready By” Time
+        │
+        ▼
+Confirm Partial Payment Received
+        │
+        ▼
+Mark Order Ready → Push Notification to Customer
+        │
+        ▼
+Order Completed When Customer Picks Up
+
+3. Backend / System Overview
+Database:
+- Users (Customers & Shop Owners)
+- Shops (Details, Verification, Catalog)
+- Products (Price, Stock, Category)
+- Orders (Customer, Shop, Items, Payment, Ready By)
+- Notifications (Order Updates)
+
+Notifications:
+- Push for Order Status (Future: WhatsApp)
+
+Payment:
+- Partial Payment via Google Pay (manual verification by shop)
+
+App:
+- Single app for Customer + Shop Owner
+- Role-based login differentiates views

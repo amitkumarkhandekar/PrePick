@@ -1,0 +1,161 @@
+1. App Overview & Objectives
+
+App Name (Placeholder): Online Dukaan
+Objective:
+To create a platform connecting customers with local shops (general stores, medical stores, bakeries, hardware, stationery, etc.) allowing customers to browse products, place orders with partial upfront payment via Google Pay, and pick them up in-store. The goal is to simplify shopping for busy customers while helping shops increase sales without delivery hassles.
+
+Key Value Propositions:
+
+Customers save time by pre-ordering items.
+
+Shops can reach more customers and manage orders efficiently.
+
+Simple, cost-effective MVP with minimal tech overhead.
+
+2. Target Audience
+
+Urban customers with busy schedules.
+
+Local shop owners looking to increase sales without investing in delivery infrastructure.
+
+Shops across multiple categories: General/Kirana, Medical, Stationery, Hardware, Bakery.
+
+3. Core Features & Functionality
+Customer Features:
+
+Browse nearby verified shops using GPS.
+
+View product catalogs with hundreds of items.
+
+Add items to cart and pay partial upfront via Google Pay (non-refundable).
+
+See order “ready by” time and receive push notifications when ready.
+
+View order history and track past orders.
+
+Favorite/save preferred shops.
+
+Direct call to shops from app.
+
+Single app login via Gmail (OTP login to be implemented later).
+
+Shop Features:
+
+Manual and bulk catalog upload (Excel/CSV) and ongoing editing.
+
+Mark products out of stock.
+
+Manually set order ready time.
+
+Confirm customer orders received via Google Pay.
+
+Only verified shops can appear to customers.
+
+4. High-Level Technical Stack Recommendations
+
+Platform: Single app for both customers and shop owners with role-based login.
+
+Backend: Cloud-based database to handle hundreds of items per shop, scalable for multi-city operations in the future. Options:
+
+Firebase / Firestore: Simple, scalable, real-time notifications.
+
+PostgreSQL/MySQL: More control over relational data (catalogs, orders, users).
+
+Notifications: Push notifications (future: WhatsApp messages).
+
+Payment: Google Pay integration via shop-provided GPay number (manual confirmation).
+
+Location Services: GPS-based nearby shops display.
+
+5. Conceptual Data Model
+
+Entities:
+
+User: Customer or Shop Owner, login info, favorites.
+
+Shop: Details, verification status, GPay number, location, catalog.
+
+Product: Name, description, price, stock status.
+
+Order: Customer, shop, items, partial payment status, ready by time, order history.
+
+Notifications: Push notifications for order updates.
+
+6. UI/UX Design Principles
+
+Simple, minimalistic layout for easy navigation.
+
+Shop and customer dashboards separated logically within the same app.
+
+Product catalog searchable and filterable for large inventories.
+
+Clear “ready by” indicators and order notifications.
+
+Minimal friction in signup/login flow (Gmail initially, OTP later).
+
+Intuitive call-to-action buttons for placing orders, confirming payments, and calling shops.
+
+7. Security Considerations
+
+Verify shops before they appear to customers.
+
+Partial upfront payment ensures customer commitment.
+
+Secure storage of user data and Google Pay info (no sensitive payment info stored in app).
+
+Role-based access control for customers vs. shop owners.
+
+8. Development Phases / Milestones
+Phase 1 – MVP
+
+Single app with role-based login.
+
+Manual and bulk catalog upload for shops.
+
+Customer order flow with partial Google Pay payment.
+
+Manual order confirmation by shops.
+
+Basic push notifications.
+
+GPS-based shop listing.
+
+Order history and favorites feature.
+
+Phase 2 – Enhancements
+
+OTP login implementation.
+
+Stock tracking and automated updates.
+
+Improved notifications (WhatsApp integration).
+
+Advanced filtering/search for catalogs.
+
+Multi-city scaling and regional dashboards.
+
+9. Potential Challenges & Solutions
+
+Manual confirmation of orders → Mitigated by partial upfront payment.
+
+Customer cancellations → Partial payment ensures commitment.
+
+Large catalogs → Support bulk uploads and search/filter UI.
+
+Shop verification → Manual verification by team before shops go live.
+
+Scalability for multiple cities → Design database and backend for regional data separation.
+
+10. Future Expansion Possibilities
+
+Full payment gateway integration with refunds.
+
+Stock tracking & real-time inventory updates.
+
+Loyalty programs and discounts.
+
+Analytics dashboards for shop owners.
+
+Multi-city expansion and advanced location-based features.
+
+AI-powered product recommendations for customers

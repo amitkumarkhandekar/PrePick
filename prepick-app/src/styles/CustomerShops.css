@@ -1,0 +1,214 @@
+.customer-shops {
+  padding: 20px 0;
+}
+
+.customer-shops h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.shops-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.shop-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.shop-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+}
+
+.shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.shop-header h3 {
+  font-size: 1.4rem;
+  color: #1f2937;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.shop-category {
+  display: inline-block;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e40af;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid #93c5fd;
+}
+
+.favorite-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #ccc;
+  transition: all 0.3s;
+}
+
+.favorite-btn.active {
+  color: #f59e0b;
+  filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.4));
+}
+
+.favorite-btn:hover {
+  transform: scale(1.2);
+}
+
+.shop-details {
+  margin: 15px 0;
+}
+
+.shop-address, .shop-hours {
+  color: #6b7280;
+  margin: 8px 0;
+  font-size: 0.95rem;
+}
+
+.shop-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.call-btn, .browse-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
+}
+
+.call-btn {
+  background: white;
+  border: 2px solid #10b981;
+  color: #10b981;
+}
+
+.call-btn:hover {
+  background: #10b981;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.browse-btn {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: white;
+  border: 2px solid #f97316;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.browse-btn:hover {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+}
+
+.no-shops {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .shops-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .customer-shops h2 {
+    font-size: 1.6rem;
+  }
+
+  .shops-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .shop-card {
+    padding: 16px;
+  }
+
+  .shop-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .shop-actions {
+    flex-direction: column;
+  }
+
+  .call-btn, .browse-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .customer-shops {
+    padding: 15px 0;
+  }
+
+  .customer-shops h2 {
+    font-size: 1.4rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .shops-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .shop-card {
+    padding: 14px;
+  }
+
+  .shop-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .shop-category {
+    font-size: 0.8rem;
+    padding: 3px 10px;
+  }
+
+  .favorite-btn {
+    font-size: 1.5rem;
+  }
+
+  .shop-address, .shop-hours {
+    font-size: 0.9rem;
+  }
+}
