@@ -300,28 +300,7 @@ const Signup = () => {
 
           {formData.role === 'shop' && (
             <>
-              <div style={{ 
-                backgroundColor: '#eff6ff', 
-                padding: '15px', 
-                borderRadius: '8px', 
-                margin: '25px 0',
-                borderLeft: '4px solid #3b82f6'
-              }}>
-                <h3 style={{ 
-                  margin: '0 0 10px 0', 
-                  color: '#1e40af',
-                  fontSize: '1.1rem'
-                }}>
-                  🏪 Shop Information
-                </h3>
-                <p style={{ 
-                  margin: 0, 
-                  color: '#374151',
-                  fontSize: '0.9rem'
-                }}>
-                  Please provide your shop details. These will be visible to customers.
-                </p>
-              </div>
+              <div className="section-title">🏪 Shop Information</div>
               
               <div className="form-group">
                 <label htmlFor="shopName">Shop Name *</label>
@@ -387,14 +366,6 @@ const Signup = () => {
                   onChange={handleChange}
                   placeholder="Enter shop address"
                   rows="3"
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    fontSize: '1rem',
-                    border: '2px solid #e5e7eb',
-                    borderRadius: '8px',
-                    fontFamily: 'inherit'
-                  }}
                 />
               </div>
 

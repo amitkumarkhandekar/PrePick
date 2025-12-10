@@ -3,174 +3,195 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
-  padding: 20px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, var(--primary-darker) 100%);
+  padding: var(--spacing-5);
 }
 
 .login-card {
-  background: white;
-  padding: 40px;
-  border-radius: 16px;
+  background: var(--white);
+  padding: var(--spacing-10);
+  border-radius: var(--radius-2xl);
   box-shadow: 0 20px 60px rgba(5, 150, 105, 0.3);
   max-width: 450px;
   width: 100%;
   border: 2px solid rgba(16, 185, 129, 0.1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  transform: translateY(0);
+  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
 }
 
 .login-card h1 {
-  font-size: 2.5rem;
-  background: linear-gradient(135deg, #10b981, #059669);
+  font-size: var(--font-size-4xl);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 10px;
+  margin-bottom: var(--spacing-2);
   text-align: center;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.025em;
 }
 
 .tagline {
   text-align: center;
-  color: #666;
-  margin-bottom: 30px;
-  font-size: 0.95rem;
+  color: var(--gray-600);
+  margin-bottom: var(--spacing-6);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
 }
 
 .login-form {
-  margin-bottom: 30px;
+  margin-bottom: var(--spacing-6);
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-5);
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #333;
+  margin-bottom: var(--spacing-2);
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-700);
 }
 
 .form-group input {
   width: 100%;
-  padding: 12px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
+  padding: var(--spacing-3);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  transition: border-color var(--transition-fast);
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+  transform: translateY(-1px);
 }
 
 .error-message {
-  background: #fef2f2;
-  color: #dc2626;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  font-size: 0.9rem;
-  border-left: 4px solid #dc2626;
+  background: var(--error-bg);
+  color: var(--error);
+  padding: var(--spacing-3);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-4);
+  font-size: var(--font-size-sm);
+  border-left: 4px solid var(--error);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
 }
 
 .login-button {
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-  color: white;
+  padding: var(--spacing-4);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  color: var(--white);
   border: none;
-  border-radius: 10px;
-  font-size: 1.1rem;
-  font-weight: 700;
+  border-radius: var(--radius-xl);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-medium);
   box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
 }
 
 .login-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
-  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent-darker) 100%);
 }
 
 .demo-accounts {
-  background: #f0fdf4;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  border: 1px solid #bbf7d0;
+  background: var(--success-bg);
+  padding: var(--spacing-5);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--spacing-5);
+  border: 1px solid var(--success-light);
 }
 
 .demo-accounts h3 {
-  font-size: 1rem;
-  margin-bottom: 12px;
-  color: #333;
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-3);
+  color: var(--gray-900);
+  font-weight: var(--font-weight-semibold);
 }
 
 .demo-accounts ul {
   list-style: none;
+  margin: 0;
+  padding-left: 0;
 }
 
 .demo-accounts li {
-  padding: 8px 0;
-  font-size: 0.9rem;
-  color: #555;
+  padding: var(--spacing-2) 0;
+  font-size: var(--font-size-sm);
+  color: var(--gray-600);
+  border-bottom: 1px dotted var(--gray-200);
 }
 
 .info-text {
   text-align: center;
-  font-size: 0.85rem;
-  color: #888;
-  line-height: 1.5;
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
+  line-height: 1.6;
+  margin-top: var(--spacing-4);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .login-container {
-    padding: 15px;
+    padding: var(--spacing-4);
   }
 
   .login-card {
-    padding: 30px 20px;
+    padding: var(--spacing-6) var(--spacing-5);
   }
 
   .login-card h1 {
-    font-size: 2rem;
+    font-size: var(--font-size-3xl);
   }
 
   .tagline {
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
   }
 
   .demo-accounts {
-    padding: 15px;
+    padding: var(--spacing-4);
   }
 
   .demo-accounts li {
-    font-size: 0.85rem;
+    font-size: var(--font-size-xs);
   }
 }
 
 @media (max-width: 480px) {
   .login-card {
-    padding: 25px 15px;
+    padding: var(--spacing-5) var(--spacing-4);
   }
 
   .login-card h1 {
-    font-size: 1.75rem;
+    font-size: var(--font-size-2xl);
   }
 
   .form-group input {
-    padding: 10px;
-    font-size: 0.95rem;
+    padding: var(--spacing-2);
+    font-size: var(--font-size-sm);
   }
 
   .login-button {
-    padding: 12px;
-    font-size: 1rem;
+    padding: var(--spacing-3);
+    font-size: var(--font-size-base);
   }
 }

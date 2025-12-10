@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { addProduct, addBulkProducts } from '../services/databaseService';
 import BulkProductEntry from './BulkProductEntry';
+import '../styles/components.css';
 
 const ProductManagement = ({ shopId, onProductAdded }) => {
   const [activeMode, setActiveMode] = useState('manual'); // 'manual' or 'bulk'
@@ -64,15 +65,15 @@ const ProductManagement = ({ shopId, onProductAdded }) => {
 
   return (
     <div className="product-management">
-      <div className="mode-toggle">
+      <div className="mode-toggle d-flex gap-2 mb-4">
         <button
-          className={`mode-btn ${activeMode === 'manual' ? 'active' : ''}`}
+          className={`btn btn-outline-primary ${activeMode === 'manual' ? 'active' : ''}`}
           onClick={() => setActiveMode('manual')}
         >
           Add Manually
         </button>
         <button
-          className={`mode-btn ${activeMode === 'bulk' ? 'active' : ''}`}
+          className={`btn btn-outline-primary ${activeMode === 'bulk' ? 'active' : ''}`}
           onClick={() => setActiveMode('bulk')}
         >
           Bulk Entry
@@ -80,15 +81,15 @@ const ProductManagement = ({ shopId, onProductAdded }) => {
       </div>
 
       {message.text && (
-        <div className={`message ${message.type}`}>
+        <div className={`alert alert-${message.type} mb-4`}>
           {message.text}
         </div>
       )}
 
       {activeMode === 'manual' ? (
-        <form onSubmit={handleManualSubmit} className="product-form">
-          <div className="form-group">
-            <label htmlFor="name">Product Name *</label>
+        <form onSubmit={handleManualSubmit} className="product-form card p-4">
+          <div className="form-group mb-4">
+            <label htmlFor="name" className="form-label">Product Name *</label>
             <input
               type="text"
               id="name"
@@ -97,11 +98,12 @@ const ProductManagement = ({ shopId, onProductAdded }) => {
               onChange={handleChange}
               placeholder="e.g., Rice (1kg)"
               required
+              className="form-control"
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="price">Price (₹) *</label>
+          <div className="form-group mb-4">
+            <label htmlFor="price" className="form-label">Price (₹) *</label>
             <input
               type="number"
               id="price"
@@ -112,17 +114,19 @@ const ProductManagement = ({ shopId, onProductAdded }) => {
               min="0"
               step="0.01"
               required
+              className="form-control"
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="category">Category *</label>
+          <div className="form-group mb-4">
+            <label htmlFor="category" className="form-label">Category *</label>
             <select
               id="category"
               name="category"
               value={formData.category}
               onChange={handleChange}
               required
+              className="form-control"
             >
               {categories.map(cat => (
                 <option key={cat} value={cat}>{cat}</option>
@@ -130,19 +134,20 @@ const ProductManagement = ({ shopId, onProductAdded }) => {
             </select>
           </div>
 
-          <div className="form-group checkbox">
-            <label>
+          <div className="form-group mb-4">
+            <label className="form-label d-flex gap-2">
               <input
                 type="checkbox"
                 name="inStock"
                 checked={formData.inStock}
                 onChange={handleChange}
+                className="form-checkbox"
               />
               <span>In Stock</span>
             </label>
           </div>
 
-          <button type="submit" className="submit-btn" disabled={loading}>
+          <button type="submit" className="btn btn-primary w-full" disabled={loading}>
             {loading ? 'Adding...' : 'Add Product'}
           </button>
         </form>

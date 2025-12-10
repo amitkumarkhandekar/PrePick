@@ -3,6 +3,15 @@ import { useApp } from '../context/AppContext';
 import logo from '../assets/Logo.png';
 import '../styles/Layout.css';
 
+// Helper function to get initials for avatar
+const getUserInitials = (name) => {
+  if (!name) return 'U';
+  const names = name.split(' ');
+  return names.length > 1 
+    ? `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase()
+    : names[0][0].toUpperCase();
+};
+
 const ShopLayout = () => {
   const { currentUser, logout, shops } = useApp();
   const navigate = useNavigate();
@@ -43,7 +52,7 @@ const ShopLayout = () => {
             onClick={() => navigate('/shop/profile')}
             title="Edit Profile"
           >
-            👤
+            {getUserInitials(currentUser?.name)}
           </button>
           <button className="logout-btn" onClick={handleLogout}>
             <span>🚪</span>
