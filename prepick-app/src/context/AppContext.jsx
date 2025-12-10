@@ -43,11 +43,12 @@ export const AppProvider = ({ children }) => {
             });
           } else {
             // Profile doesn't exist, create basic user object
+            // This shouldn't happen after signup, but just in case
             setCurrentUser({
               uid: firebaseUser.uid,
               email: firebaseUser.email,
               name: firebaseUser.displayName || 'User',
-              role: 'customer'
+              role: 'customer' // Default to customer if no profile exists
             });
           }
         } catch (error) {
@@ -200,26 +201,7 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  // Shop functions
-  const addProduct = (product) => {
-    const newProduct = {
-      ...product,
-      id: `prod${products.length + 1}`,
-    };
-    setProducts([...products, newProduct]);
-    return newProduct;
-  };
-
-  const updateProduct = (productId, updates) => {
-    setProducts(products.map(product =>
-      product.id === productId ? { ...product, ...updates } : product
-    ));
-  };
-
-  const deleteProduct = (productId) => {
-    setProducts(products.filter(product => product.id !== productId));
-  };
-
+  // Favorites functions
   const toggleFavorite = (shopId) => {
     if (!currentUser || currentUser.role !== 'customer') return;
     
@@ -250,10 +232,8 @@ export const AppProvider = ({ children }) => {
     clearCart,
     createOrder,
     updateOrder,
-    addProduct,
-    updateProduct,
-    deleteProduct,
     toggleFavorite,
+    setCurrentUser
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

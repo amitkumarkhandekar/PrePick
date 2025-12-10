@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { createShop } from '../services/databaseService';
@@ -29,6 +29,20 @@ const ShopSetup = () => {
     'Hardware',
     'Other'
   ];
+
+  // Pre-fill form with existing data if available
+  useEffect(() => {
+    if (currentUser) {
+      setFormData({
+        name: currentUser.shopName || currentUser.name || '',
+        category: currentUser.shopCategory || 'General Store',
+        phone: currentUser.shopPhone || currentUser.phone || '',
+        gpayNumber: currentUser.shopGpayNumber || '',
+        address: currentUser.shopAddress || '',
+        openingHours: currentUser.shopOpeningHours || '9:00 AM - 9:00 PM'
+      });
+    }
+  }, [currentUser]);
 
   const handleChange = (e) => {
     setFormData({

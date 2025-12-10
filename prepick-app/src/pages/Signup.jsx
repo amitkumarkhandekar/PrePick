@@ -1,19 +1,41 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { signUpWithEmail, signInWithGoogle, handleGoogleRedirect, getUserProfile } from '../services/authService';
+import { useApp } from '../context/AppContext';
 import '../styles/Auth.css';
 
 const Signup = () => {
+  const { setCurrentUser } = useApp(); // Get setCurrentUser from context
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'customer'
+    role: 'customer',
+    // Additional fields for profile information
+    phone: '',
+    shopName: '',
+    shopCategory: 'General Store',
+    shopPhone: '',
+    shopGpayNumber: '',
+    shopAddress: '',
+    shopOpeningHours: '9:00 AM - 9:00 PM'
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const categories = [
+    'General Store',
+    'Medical',
+    'Bakery',
+    'Stationery',
+    'Electronics',
+    'Clothing',
+    'Grocery',
+    'Hardware',
+    'Other'
+  ];
 
   // Handle Google redirect result on component mount
   useEffect(() => {
@@ -67,16 +89,90 @@ const Signup = () => {
       return;
     }
 
+    // Validate phone number if provided
+    if (formData.phone && !/^[0-9+\-\s()]+$/.test(formData.phone)) {
+      setError('Please enter a valid phone number');
+      return;
+    }
+
+    // Additional validation for shop owners
+    if (formData.role === 'shop') {
+      if (!formData.shopName.trim()) {
+        setError('Shop name is required');
+        return;
+      }
+      
+      if (!formData.shopPhone && !formData.phone) {
+        setError('Either shop phone or personal phone is required');
+        return;
+      }
+      
+      // Validate shop phone number if provided
+      if (formData.shopPhone && !/^[0-9+\-\s()]+$/.test(formData.shopPhone)) {
+        setError('Please enter a valid shop phone number');
+        return;
+      }
+      
+      if (!formData.shopGpayNumber) {
+        setError('Google Pay number is required');
+        return;
+      } else if (!/^[0-9]{10}$/.test(formData.shopGpayNumber)) {
+        setError('Google Pay number must be 10 digits');
+        return;
+      }
+      
+      if (!formData.shopAddress.trim()) {
+        setError('Shop address is required');
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
-      const user = await signUpWithEmail(formData.email, formData.password, formData.name, formData.role);
+      // Pass additional profile data to signup function
+      const user = await signUpWithEmail(
+        formData.email, 
+        formData.password, 
+        formData.name, 
+        formData.role,
+        {
+          phone: formData.phone,
+          shopName: formData.shopName,
+          shopCategory: formData.shopCategory,
+          shopPhone: formData.shopPhone,
+          shopGpayNumber: formData.shopGpayNumber,
+          shopAddress: formData.shopAddress,
+          shopOpeningHours: formData.shopOpeningHours
+        }
+      );
       console.log('Signup successful:', user);
+      
+      // Manually set the currentUser in context to avoid timing issues
+      const userProfile = {
+        uid: user.uid,
+        email: user.email,
+        name: formData.name,
+        role: formData.role,
+        phone: formData.phone,
+        // For shop owners, also add shop-related fields
+        ...(formData.role === 'shop' && {
+          shopName: formData.shopName,
+          shopCategory: formData.shopCategory,
+          shopPhone: formData.shopPhone || formData.phone || '',
+          shopGpayNumber: formData.shopGpayNumber,
+          shopAddress: formData.shopAddress,
+          shopOpeningHours: formData.shopOpeningHours
+        })
+      };
+      
+      setCurrentUser(userProfile);
       
       // Redirect based on role
       if (formData.role === 'customer') {
         navigate('/customer/shops');
       } else {
+        // For shop owners, redirect to dashboard since we have all info
         navigate('/shop/dashboard');
       }
     } catch (error) {
@@ -176,6 +272,19 @@ const Signup = () => {
           </div>
 
           <div className="form-group">
+            <label htmlFor="phone">Phone Number</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="Enter your phone number"
+            />
+            <p className="help-text">Used for order notifications and communication</p>
+          </div>
+
+          <div className="form-group">
             <label htmlFor="role">I am a:</label>
             <select
               id="role"
@@ -188,6 +297,120 @@ const Signup = () => {
               <option value="shop">Shop Owner</option>
             </select>
           </div>
+
+          {formData.role === 'shop' && (
+            <>
+              <div style={{ 
+                backgroundColor: '#eff6ff', 
+                padding: '15px', 
+                borderRadius: '8px', 
+                margin: '25px 0',
+                borderLeft: '4px solid #3b82f6'
+              }}>
+                <h3 style={{ 
+                  margin: '0 0 10px 0', 
+                  color: '#1e40af',
+                  fontSize: '1.1rem'
+                }}>
+                  🏪 Shop Information
+                </h3>
+                <p style={{ 
+                  margin: 0, 
+                  color: '#374151',
+                  fontSize: '0.9rem'
+                }}>
+                  Please provide your shop details. These will be visible to customers.
+                </p>
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="shopName">Shop Name *</label>
+                <input
+                  type="text"
+                  id="shopName"
+                  name="shopName"
+                  value={formData.shopName}
+                  onChange={handleChange}
+                  placeholder="Enter your shop name"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="shopCategory">Shop Category</label>
+                <select
+                  id="shopCategory"
+                  name="shopCategory"
+                  value={formData.shopCategory}
+                  onChange={handleChange}
+                  className="role-select"
+                >
+                  {categories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="shopPhone">Shop Phone Number</label>
+                <input
+                  type="tel"
+                  id="shopPhone"
+                  name="shopPhone"
+                  value={formData.shopPhone}
+                  onChange={handleChange}
+                  placeholder="Enter shop phone number"
+                />
+                {!formData.shopPhone && (
+                  <p className="help-text">If not provided, your personal phone number will be used</p>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="shopGpayNumber">Google Pay Number *</label>
+                <input
+                  type="tel"
+                  id="shopGpayNumber"
+                  name="shopGpayNumber"
+                  value={formData.shopGpayNumber}
+                  onChange={handleChange}
+                  placeholder="Enter 10-digit GPay number"
+                />
+                <p className="help-text">Customers will use this number to make partial payments</p>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="shopAddress">Shop Address *</label>
+                <textarea
+                  id="shopAddress"
+                  name="shopAddress"
+                  value={formData.shopAddress}
+                  onChange={handleChange}
+                  placeholder="Enter shop address"
+                  rows="3"
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    fontSize: '1rem',
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '8px',
+                    fontFamily: 'inherit'
+                  }}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="shopOpeningHours">Opening Hours *</label>
+                <input
+                  type="text"
+                  id="shopOpeningHours"
+                  name="shopOpeningHours"
+                  value={formData.shopOpeningHours}
+                  onChange={handleChange}
+                  placeholder="e.g., 9:00 AM - 9:00 PM"
+                />
+              </div>
+            </>
+          )}
 
           {error && <div className="error-message">{error}</div>}
 

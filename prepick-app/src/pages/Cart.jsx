@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import OrderReceipt from '../components/OrderReceipt';
 import '../styles/Cart.css';
 
 const Cart = () => {
   const { cart, updateCartQuantity, removeFromCart, createOrder, shops, currentUser } = useApp();
   const navigate = useNavigate();
   const [showCheckout, setShowCheckout] = useState(false);
+  const [showOrderConfirmation, setShowOrderConfirmation] = useState(false);
+  const [lastOrder, setLastOrder] = useState(null);
 
   if (cart.length === 0) {
     return (
@@ -45,6 +48,7 @@ const Cart = () => {
       customerId: currentUser.uid,
       customerName: currentUser.name,
       customerEmail: currentUser.email,
+      customerPhone: currentUser.phone, // Add customer phone number
       shopId: shopId,
       shopName: shop.name,
       items: shopItems.map(item => ({
@@ -60,17 +64,19 @@ const Cart = () => {
     };
 
     try {
-      await createOrder(orderData);
-      alert(`Order placed successfully!
-
-Please pay ₹${orderData.partialPayment} to GPay: ${shop.gpayNumber}
-
-The shop will confirm your order once payment is received.`);
-      navigate('/customer/orders');
+      const orderId = await createOrder(orderData);
+      const orderWithId = { ...orderData, id: orderId, createdAt: new Date().toISOString() };
+      setLastOrder(orderWithId);
+      setShowOrderConfirmation(true);
     } catch (error) {
       console.error('Error placing order:', error);
       alert('Failed to place order. Please try again.');
     }
+  };
+
+  const closeOrderConfirmation = () => {
+    setShowOrderConfirmation(false);
+    navigate('/customer/orders');
   };
 
   return (
@@ -182,6 +188,26 @@ The shop will confirm your order once payment is received.`);
           </button>
         )}
       </div>
+
+      {showOrderConfirmation && lastOrder && (
+        <div className="order-confirmation-modal">
+          <div className="modal-content">
+            <h2>Order Placed Successfully!</h2>
+            <p>Please pay ₹{lastOrder.partialPayment} to GPay: {shops.find(s => s.id === lastOrder.shopId)?.gpayNumber}</p>
+            <p>The shop will confirm your order once payment is received.</p>
+            
+            <OrderReceipt 
+              order={lastOrder} 
+              shop={shops.find(s => s.id === lastOrder.shopId)} 
+              customer={currentUser} 
+            />
+            
+            <button onClick={closeOrderConfirmation} className="close-btn">
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

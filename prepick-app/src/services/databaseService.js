@@ -214,6 +214,20 @@ export const updateOrder = async (orderId, updates) => {
   }
 };
 
+// ============ USERS ============
+
+export const updateUserProfile = async (userId, updates) => {
+  try {
+    const userRef = ref(database, `users/${userId}`);
+    await update(userRef, {
+      ...updates,
+      updatedAt: new Date().toISOString()
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 // ============ FAVORITES ============
 
 export const toggleFavorite = async (userId, shopId) => {

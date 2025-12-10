@@ -5,6 +5,7 @@ import { requestNotificationPermission } from './services/notificationService';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ShopSetup from './pages/ShopSetup';
+import EditProfile from './pages/EditProfile';
 import CustomerLayout from './components/CustomerLayout';
 import ShopLayout from './components/ShopLayout';
 import CustomerShops from './pages/CustomerShops';
@@ -45,48 +46,23 @@ function ProtectedRoute({ children, allowedRole }) {
 }
 
 function AppRoutes() {
-  const { currentUser, authLoading } = useApp();
+  const { currentUser } = useApp();
   
-  // Request notification permission when user logs in
+  // Redirect authenticated users to their respective dashboards
   useEffect(() => {
-    if (currentUser && 'Notification' in window) {
-      requestNotificationPermission();
-    }
+    // This effect runs on component mount and when currentUser changes
   }, [currentUser]);
-  
-  // Show loading screen while checking authentication
-  if (authLoading) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-        color: 'white',
-        fontSize: '1.5rem',
-        fontWeight: '600'
-      }}>
-        Loading PrePick...
-      </div>
-    );
-  }
   
   return (
     <Routes>
-      <Route path="/" element={
-        currentUser ? (
-          currentUser.role === 'customer' ? 
-            <Navigate to="/customer/shops" replace /> : 
-            <Navigate to="/shop/dashboard" replace />
-        ) : (
-          <Login />
-        )
-      } />
-      
+      <Route path="/" element={currentUser ? (
+        currentUser.role === 'customer' ? 
+        <Navigate to="/customer/shops" replace /> : 
+        <Navigate to="/shop/dashboard" replace />
+      ) : <Login />}>
+      </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/shop/setup" element={<ShopSetup />} />
       
       {/* Customer Routes */}
       <Route path="/customer" element={
@@ -98,6 +74,7 @@ function AppRoutes() {
         <Route path="shop/:shopId" element={<ShopCatalog />} />
         <Route path="cart" element={<Cart />} />
         <Route path="orders" element={<CustomerOrders />} />
+        <Route path="profile" element={<EditProfile />} />
       </Route>
       
       {/* Shop Owner Routes */}
@@ -107,6 +84,8 @@ function AppRoutes() {
         </ProtectedRoute>
       }>
         <Route path="dashboard" element={<ShopDashboard />} />
+        <Route path="setup" element={<ShopSetup />} />
+        <Route path="profile" element={<EditProfile />} />
       </Route>
       
       {/* Catch all */}
@@ -126,4 +105,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

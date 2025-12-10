@@ -8,9 +8,10 @@ import {
 } from 'firebase/auth';
 import { ref, set, get } from 'firebase/database';
 import { auth, googleProvider, database } from '../config/firebase';
+import { createShop } from './databaseService';
 
 // Sign up with email and password
-export const signUpWithEmail = async (email, password, name, role = 'customer') => {
+export const signUpWithEmail = async (email, password, name, role = 'customer', profileData = {}) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
@@ -18,17 +19,56 @@ export const signUpWithEmail = async (email, password, name, role = 'customer') 
     // Update profile with name
     await updateProfile(user, { displayName: name });
     
-    // Create user profile in database
-    await set(ref(database, `users/${user.uid}`), {
+    // Create user profile in database with additional information
+    const userProfile = {
       uid: user.uid,
       email: user.email,
       name: name,
-      role: role,
+      role: role, // Ensure role is explicitly set
       createdAt: new Date().toISOString(),
       favorites: []
-    });
+    };
     
-    return user;
+    // Add phone number if provided
+    if (profileData.phone) {
+      userProfile.phone = profileData.phone;
+    }
+    
+    // For shop owners, also add shop-related fields
+    if (role === 'shop') {
+      userProfile.shopName = profileData.shopName || name;
+      userProfile.shopCategory = profileData.shopCategory || 'General Store';
+      userProfile.shopPhone = profileData.shopPhone || profileData.phone || '';
+      userProfile.shopGpayNumber = profileData.shopGpayNumber || '';
+      userProfile.shopAddress = profileData.shopAddress || '';
+      userProfile.shopOpeningHours = profileData.shopOpeningHours || '9:00 AM - 9:00 PM';
+    }
+    
+    // Save user profile
+    await set(ref(database, `users/${user.uid}`), userProfile);
+    
+    // If this is a shop owner with complete shop information, create the shop record
+    if (role === 'shop' && profileData.shopName && profileData.shopGpayNumber && profileData.shopAddress) {
+      try {
+        await createShop({
+          name: profileData.shopName,
+          category: profileData.shopCategory || 'General Store',
+          phone: profileData.shopPhone || profileData.phone || '',
+          gpayNumber: profileData.shopGpayNumber,
+          address: profileData.shopAddress,
+          openingHours: profileData.shopOpeningHours || '9:00 AM - 9:00 PM',
+          ownerId: user.uid,
+          ownerName: name,
+          ownerEmail: user.email,
+          verified: false
+        });
+      } catch (shopError) {
+        console.error('Error creating shop during signup:', shopError);
+        // Don't fail the signup if shop creation fails, user can set it up later
+      }
+    }
+    
+    return user; // Return just the user object
   } catch (error) {
     throw error;
   }

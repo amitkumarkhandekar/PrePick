@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { getShopsByOwner, getProductsByShop, updateProduct, deleteProduct, getOrdersByShop, updateOrder as updateOrderInDB, listenToOrders } from '../services/databaseService';
 import ProductManagement from '../components/ProductManagement';
+import PrintableOrderList from '../components/PrintableOrderList';
 import '../styles/ShopDashboard.css';
 
 const ShopDashboard = () => {
@@ -26,11 +27,46 @@ const ShopDashboard = () => {
         if (shops && shops.length > 0) {
           setUserShop(shops[0]); // Use first shop
         } else {
-          // No shop found, redirect to setup
-          navigate('/shop/setup');
+          // Check if user already has shop information in their profile
+          // If they do, we can create the shop record automatically
+          if (currentUser.shopName && currentUser.shopGpayNumber && currentUser.shopAddress) {
+            try {
+              // Create shop from user profile data
+              const shopId = await createShop({
+                name: currentUser.shopName,
+                category: currentUser.shopCategory || 'General Store',
+                phone: currentUser.shopPhone || currentUser.phone || '',
+                gpayNumber: currentUser.shopGpayNumber,
+                address: currentUser.shopAddress,
+                openingHours: currentUser.shopOpeningHours || '9:00 AM - 9:00 PM',
+                ownerId: currentUser.uid,
+                ownerName: currentUser.name,
+                ownerEmail: currentUser.email,
+                verified: false
+              });
+              
+              // Fetch the newly created shop
+              const newShops = await getShopsByOwner(currentUser.uid);
+              if (newShops && newShops.length > 0) {
+                setUserShop(newShops[0]);
+              } else {
+                // If shop creation somehow failed, redirect to setup
+                navigate('/shop/setup');
+              }
+            } catch (creationError) {
+              console.error('Error creating shop from profile data:', creationError);
+              // Redirect to manual setup if automatic creation fails
+              navigate('/shop/setup');
+            }
+          } else {
+            // No shop found and no profile data, redirect to setup
+            navigate('/shop/setup');
+          }
         }
       } catch (error) {
         console.error('Error fetching shop:', error);
+        // In case of error, still try to redirect to setup
+        navigate('/shop/setup');
       } finally {
         setLoading(false);
       }
@@ -268,12 +304,25 @@ const ShopDashboard = () => {
                       <div className="order-amount">
                         Total: ₹{order.totalAmount}
                       </div>
-                      <button
-                        className="btn-confirm"
-                        onClick={() => handleConfirmOrder(order.id)}
-                      >
-                        Confirm Order
-                      </button>
+                      <div className="order-actions">
+                        <PrintableOrderList 
+                          order={order} 
+                          shop={userShop} 
+                          customer={{ 
+                            name: order.customerName, 
+                            email: order.customerEmail, 
+                            uid: order.customerId,
+                            phone: order.customerPhone
+                          }}
+                          userType="shop"
+                        />
+                        <button
+                          className="btn-confirm"
+                          onClick={() => handleConfirmOrder(order.id)}
+                        >
+                          Confirm Order
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -315,6 +364,17 @@ const ShopDashboard = () => {
                         Total: ₹{order.totalAmount} | Paid: ₹{order.partialPayment}
                       </div>
                       <div className="order-actions">
+                        <PrintableOrderList 
+                          order={order} 
+                          shop={userShop} 
+                          customer={{ 
+                            name: order.customerName, 
+                            email: order.customerEmail, 
+                            uid: order.customerId,
+                            phone: order.customerPhone
+                          }}
+                          userType="shop"
+                        />
                         {order.orderStatus === 'confirmed' && (
                           <button
                             className="btn-ready"
@@ -370,6 +430,19 @@ const ShopDashboard = () => {
                     <div className="order-footer">
                       <div className="order-amount">
                         Total: ₹{order.totalAmount}
+                      </div>
+                      <div className="order-actions">
+                        <PrintableOrderList 
+                          order={order} 
+                          shop={userShop} 
+                          customer={{ 
+                            name: order.customerName, 
+                            email: order.customerEmail, 
+                            uid: order.customerId,
+                            phone: order.customerPhone
+                          }}
+                          userType="shop"
+                        />
                       </div>
                     </div>
                   </div>

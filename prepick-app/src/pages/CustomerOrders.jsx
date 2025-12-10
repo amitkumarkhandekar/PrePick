@@ -3,6 +3,8 @@ import { useApp } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
 import { ref, query, orderByChild, equalTo, onValue } from 'firebase/database';
 import { database } from '../config/firebase';
+import OrderReceipt from '../components/OrderReceipt';
+import PrintableOrderList from '../components/PrintableOrderList';
 import '../styles/CustomerOrders.css';
 
 const CustomerOrders = () => {
@@ -155,6 +157,12 @@ const CustomerOrders = () => {
                 <button className="call-shop-btn" onClick={() => window.open(`tel:${shop.phone}`)}>
                   📞 Call Shop
                 </button>
+                <PrintableOrderList 
+                  order={order} 
+                  shop={shop} 
+                  customer={currentUser}
+                  userType="customer"
+                />
               </div>
             </div>
           );

@@ -35,6 +35,13 @@ const ShopLayout = () => {
 
         <div className="nav-user">
           <span className="shop-name">{userShop?.name}</span>
+          <button 
+            className="profile-btn" 
+            onClick={() => navigate('/shop/profile')}
+            title="Edit Profile"
+          >
+            👤
+          </button>
           <button className="logout-btn" onClick={handleLogout}>
             Logout
           </button>

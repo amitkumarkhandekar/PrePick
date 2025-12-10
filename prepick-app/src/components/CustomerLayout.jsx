@@ -45,6 +45,13 @@ const CustomerLayout = () => {
 
         <div className="nav-user">
           <span className="user-name">{currentUser?.name}</span>
+          <button 
+            className="profile-btn" 
+            onClick={() => navigate('/customer/profile')}
+            title="Edit Profile"
+          >
+            👤
+          </button>
           <button className="logout-btn" onClick={handleLogout}>
             Logout
           </button>
