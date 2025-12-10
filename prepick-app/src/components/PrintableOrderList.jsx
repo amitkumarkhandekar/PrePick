@@ -1,129 +1,157 @@
-import React, { useState } from 'react';
-import '../styles/Cart.css';
+import { useEffect } from 'react';
 
-const PrintableOrderList = ({ order, shop, customer, userType }) => {
-  const [fetchedItems, setFetchedItems] = useState({});
-
-  const handleCheckboxChange = (itemId) => {
-    setFetchedItems(prev => ({
-      ...prev,
-      [itemId]: !prev[itemId]
-    }));
-  };
-
+const PrintableOrderList = ({ order, shop, customer, userType = 'customer' }) => {
   const printOrderList = () => {
     const printWindow = window.open('', '_blank');
+    
+    // Separate regular items and custom items
+    const regularItems = (order.items || []).filter(item => !item.isCustom);
+    const customItems = (order.items || []).filter(item => item.isCustom);
+    
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Order List</title>
+          <title>Order List - ${order.id}</title>
           <style>
             body {
               font-family: Arial, sans-serif;
-              max-width: 210mm;
-              margin: 0 auto;
+              margin: 0;
               padding: 10mm;
-              color: #000;
-              background-color: #fff;
               font-size: 12px;
             }
+            
+            @media print {
+              @page {
+                size: A4;
+                margin: 10mm;
+              }
+              
+              body {
+                margin: 0;
+                padding: 10mm;
+              }
+            }
+            
             .header {
               text-align: center;
-              border-bottom: 2px solid #000;
-              padding-bottom: 5mm;
               margin-bottom: 5mm;
+              border-bottom: 2px solid #333;
+              padding-bottom: 3mm;
             }
-            .header h1 {
+            
+            .shop-name {
               font-size: 18px;
-              margin: 0;
+              font-weight: bold;
+              margin-bottom: 2mm;
             }
+            
             .section {
-              margin-bottom: 5mm;
+              margin: 8mm 0;
             }
+            
             .section-title {
               font-size: 14px;
               font-weight: bold;
-              margin-bottom: 2mm;
-              border-bottom: 1px solid #ccc;
+              margin-bottom: 3mm;
               padding-bottom: 1mm;
+              border-bottom: 1px solid #666;
             }
+            
             .info-grid {
               display: grid;
               grid-template-columns: 1fr 1fr;
               gap: 2mm;
-              margin-bottom: 3mm;
+              margin-bottom: 5mm;
             }
+            
             .info-item {
+              display: flex;
               margin-bottom: 1mm;
             }
+            
             .info-label {
               font-weight: bold;
-              display: inline-block;
+              min-width: 25mm;
               margin-right: 2mm;
             }
+            
             .items-table {
               width: 100%;
               border-collapse: collapse;
-              margin: 3mm 0;
+              margin-bottom: 5mm;
+            }
+            
+            .items-table th {
+              background: #f0f0f0;
+              border: 1px solid #333;
+              padding: 2mm;
+              text-align: left;
               font-size: 11px;
             }
-            .items-table th,
+            
             .items-table td {
-              border: 1px solid #000;
-              padding: 1mm;
-              text-align: left;
+              border: 1px solid #333;
+              padding: 1.5mm;
+              font-size: 11px;
             }
-            .items-table th {
-              background-color: #f0f0f0;
-              font-weight: bold;
-            }
+            
             .checkbox-cell {
+              width: 8mm;
               text-align: center;
-              width: 15px;
             }
+            
             .checkbox-cell input {
-              width: 12px;
-              height: 12px;
+              width: 5mm;
+              height: 5mm;
             }
+            
             .total-section {
               margin-top: 5mm;
               padding-top: 3mm;
-              border-top: 1px solid #000;
+              border-top: 1px solid #666;
             }
+            
             .total-row {
               display: flex;
               justify-content: space-between;
+              margin-bottom: 2mm;
               font-weight: bold;
-              margin-bottom: 1mm;
             }
+            
             .footer {
-              text-align: center;
               margin-top: 10mm;
+              text-align: center;
               font-size: 10px;
+              color: #666;
+              border-top: 1px solid #ccc;
+              padding-top: 3mm;
             }
-            @media print {
-              body {
-                padding: 5mm;
-              }
-              .no-print {
-                display: none;
-              }
+            
+            .signature-line {
+              margin-top: 10mm;
+              display: flex;
+              justify-content: space-between;
+            }
+            
+            .signature-box {
+              width: 60mm;
+              border-top: 1px solid #333;
+              text-align: center;
+              padding-top: 2mm;
+              margin-top: 15mm;
             }
           </style>
         </head>
         <body>
           <div class="header">
-            <h1>PrePick Order List</h1>
-            <p>Order ID: ${order.id || 'N/A'}</p>
+            <div class="shop-name">${shop?.name || 'Shop Name'}</div>
+            <div>Order List - ${order.id || 'N/A'}</div>
+            <div>${new Date(order.createdAt).toLocaleDateString()}</div>
           </div>
           
           <div class="section">
             <div class="info-grid">
-              <div class="info-item">
-                <span class="info-label">Date:</span>
-                <span>${new Date(order.createdAt).toLocaleDateString()}</span>
-              </div>
               <div class="info-item">
                 <span class="info-label">Time:</span>
                 <span>${new Date(order.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
@@ -154,6 +182,8 @@ const PrintableOrderList = ({ order, shop, customer, userType }) => {
             </div>
           </div>
           
+          <!-- Regular Items Section -->
+          ${regularItems.length > 0 ? `
           <div class="section">
             <div class="section-title">Items to Collect</div>
             <table class="items-table">
@@ -167,7 +197,7 @@ const PrintableOrderList = ({ order, shop, customer, userType }) => {
                 </tr>
               </thead>
               <tbody>
-                ${(order.items || []).map(item => `
+                ${regularItems.map(item => `
                   <tr>
                     <td>${item.name}</td>
                     <td>${item.quantity}</td>
@@ -181,20 +211,67 @@ const PrintableOrderList = ({ order, shop, customer, userType }) => {
               </tbody>
             </table>
           </div>
+          ` : ''}
+          
+          <!-- Custom Items Section -->
+          ${customItems.length > 0 ? `
+          <div class="section">
+            <div class="section-title">Custom Requests (Price to be added by shop)</div>
+            <table class="items-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                  <th class="checkbox-cell">✓</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${customItems.map(item => `
+                  <tr>
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>₹______</td>
+                    <td>₹______</td>
+                    <td class="checkbox-cell">
+                      <input type="checkbox">
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+          ` : ''}
           
           <div class="section total-section">
             <div class="total-row">
-              <span>Total:</span>
+              <span>Regular Items Total:</span>
               <span>₹${order.totalAmount || 0}</span>
             </div>
             <div class="total-row">
-              <span>Paid:</span>
+              <span>Paid (50% of regular items):</span>
               <span>₹${order.partialPayment || 0}</span>
             </div>
             <div class="total-row">
-              <span>To Pay:</span>
+              <span>To Pay (Regular Items):</span>
               <span>₹${(order.totalAmount - order.partialPayment) || 0}</span>
             </div>
+            ${customItems.length > 0 ? `
+            <div class="total-row">
+              <span>Custom Items Total:</span>
+              <span>₹______</span>
+            </div>
+            <div class="total-row" style="font-size: 14px; margin-top: 3mm; padding-top: 2mm; border-top: 1px solid #333;">
+              <span><strong>Grand Total:</strong></span>
+              <span><strong>₹______</strong></span>
+            </div>
+            ` : ''}
+          </div>
+          
+          <div class="signature-line">
+            <div class="signature-box">Customer Signature</div>
+            <div class="signature-box">Shop Owner Signature</div>
           </div>
           
           <div class="footer">

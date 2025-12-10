@@ -1,86 +1,58 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import { getProductsByShop } from '../services/databaseService';
+import CustomItemEntry from '../components/CustomItemEntry';
 import '../styles/ShopCatalog.css';
 
 const ShopCatalog = () => {
   const { shopId } = useParams();
-  const { shops, addToCart, cart } = useApp();
   const navigate = useNavigate();
-  
+  const { shops, cart, addToCart, listenToProducts } = useApp();
+  const [shopProducts, setShopProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [shopProducts, setShopProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  
+  const [showCustomEntry, setShowCustomEntry] = useState(false);
+
   const shop = shops.find(s => s.id === shopId);
-  
-  // Fetch products for this shop
+
+  // Fetch products when shopId changes
   useEffect(() => {
-    const fetchProducts = async () => {
-      if (!shopId) return;
-      
-      setLoading(true);
-      try {
-        const products = await getProductsByShop(shopId);
-        console.log('Products for shop:', products);
-        setShopProducts(products);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!shopId) return;
     
-    fetchProducts();
+    const unsubscribe = listenToProducts(shopId, (productsData) => {
+      console.log('Products updated for shop:', shopId, productsData);
+      setShopProducts(productsData);
+    });
+
+    return () => unsubscribe();
   }, [shopId]);
-  
+
   // Get unique categories
   const categories = ['All', ...new Set(shopProducts.map(p => p.category))];
-  
-  // Filter products
+
+  // Filter products based on search and category
   const filteredProducts = shopProducts.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const handleAddToCart = (product) => {
-    if (product.inStock) {
-      addToCart(product);
-    }
-  };
-
   const getCartQuantity = (productId) => {
-    const item = cart.find(item => item.id === productId);
+    const item = cart.find(i => i.id === productId);
     return item ? item.quantity : 0;
   };
 
-  const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const handleAddToCart = (product) => {
+    addToCart(product);
+  };
 
   if (!shop) {
     return (
-      <div className="error" style={{ padding: '40px', textAlign: 'center' }}>
-        <h3>Shop not found</h3>
-        <button onClick={() => navigate('/customer/shops')} style={{ marginTop: '20px' }}>
-          ← Back to Shops
+      <div className="shop-not-found">
+        <h2>Shop not found</h2>
+        <button onClick={() => navigate('/customer/shops')} className="back-btn">
+          Back to Shops
         </button>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '60vh',
-        fontSize: '1.2rem',
-        color: '#666'
-      }}>
-        Loading products...
       </div>
     );
   }
@@ -88,42 +60,65 @@ const ShopCatalog = () => {
   return (
     <div className="shop-catalog">
       <div className="shop-header">
-        <button className="back-btn" onClick={() => navigate('/customer/shops')}>
+        <button 
+          className="back-btn" 
+          onClick={() => navigate('/customer/shops')}
+        >
           ← Back to Shops
         </button>
         <div className="shop-info">
           <h2>{shop.name}</h2>
-          <p className="shop-category">{shop.category}</p>
+          <div className="shop-meta">
+            <span className="shop-category">{shop.category}</span>
+            <span className="shop-phone">📞 {shop.phone}</span>
+          </div>
           <p className="shop-address">📍 {shop.address}</p>
           <p className="shop-hours">🕒 {shop.openingHours}</p>
         </div>
       </div>
 
       <div className="catalog-controls">
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-        
-        <div className="category-filters">
-          {categories.map(category => (
-            <button
-              key={category}
-              className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(category)}
-            >
-              {category}
-            </button>
-          ))}
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
         </div>
+
+        <div className="category-filter">
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="category-select"
+          >
+            {categories.map(category => (
+              <option key={category} value={category}>{category}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="custom-request-section">
+        <button 
+          className="custom-request-btn"
+          onClick={() => setShowCustomEntry(!showCustomEntry)}
+        >
+          {showCustomEntry ? 'Hide Custom Request' : 'Can\'t find what you need?'}
+        </button>
+        
+        {showCustomEntry && (
+          <div className="custom-entry-container">
+            <CustomItemEntry shopId={shopId} shopName={shop.name} />
+          </div>
+        )}
       </div>
 
       <div className="products-grid">
         {filteredProducts.map(product => (
-          <div key={product.id} className={`product-card ${!product.inStock ? 'out-of-stock' : ''}`}>
+          <div key={product.id} className="product-card">
             <div className="product-info">
               <h3>{product.name}</h3>
               <p className="product-category">{product.category}</p>
@@ -161,7 +156,7 @@ const ShopCatalog = () => {
         <div className="cart-summary">
           <div className="cart-info">
             <span>{cart.length} items in cart</span>
-            <span className="cart-total">Total: ₹{cartTotal}</span>
+            <span className="cart-total">Total: ₹{cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}</span>
           </div>
           <button className="view-cart-btn" onClick={() => navigate('/customer/cart')}>
             View Cart & Checkout

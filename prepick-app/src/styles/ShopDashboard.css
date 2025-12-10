@@ -403,36 +403,38 @@
   margin-top: 20px;
 }
 
+/* Mode Toggle */
 .mode-toggle {
   display: flex;
   gap: 10px;
   margin-bottom: 25px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 15px;
 }
 
 .mode-btn {
-  flex: 1;
-  padding: 12px 24px;
-  background: white;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
+  background: #f3f4f6;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px 8px 0 0;
+  font-weight: 600;
   color: #666;
+  cursor: pointer;
   transition: all 0.3s;
 }
 
 .mode-btn:hover {
-  border-color: #10b981;
-  color: #10b981;
+  background: #e5e7eb;
+  color: #333;
 }
 
 .mode-btn.active {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  border-color: #10b981;
+  background: #10b981;
   color: white;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
+/* Messages */
 .message {
   padding: 15px;
   border-radius: 8px;
@@ -452,35 +454,41 @@
   border: 1px solid #f5c6cb;
 }
 
-.product-form, .csv-form {
-  max-width: 600px;
+/* Product Form */
+.product-form {
+  max-width: 500px;
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.product-form .form-group {
+.form-group {
   margin-bottom: 20px;
 }
 
-.product-form label {
+.form-group label {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
   color: #333;
 }
 
-.product-form input,
-.product-form select {
+.form-group input,
+.form-group select {
   width: 100%;
-  padding: 12px;
+  padding: 12px 15px;
   border: 2px solid #e5e7eb;
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s;
 }
 
-.product-form input:focus,
-.product-form select:focus {
+.form-group input:focus,
+.form-group select:focus {
   outline: none;
   border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
 .form-group.checkbox {
@@ -495,97 +503,217 @@
   margin-bottom: 0;
 }
 
-.form-group.checkbox input[type="checkbox"] {
+.form-group.checkbox input {
   width: auto;
   margin-right: 10px;
-  cursor: pointer;
+}
+
+.form-group.checkbox span {
+  font-weight: normal;
 }
 
 .submit-btn {
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  width: 100%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
-  padding: 14px 32px;
   border: none;
-  border-radius: 10px;
+  padding: 14px;
+  border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
 .submit-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
 
 .submit-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
-.csv-upload {
-  max-width: 700px;
+/* Bulk Product Entry Styles */
+.bulk-product-entry {
+  margin: 20px 0;
 }
 
-.csv-instructions {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 25px;
-}
-
-.csv-instructions h4 {
+.bulk-entry-header h3 {
   color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
-.csv-instructions p {
+.bulk-entry-header p {
   color: #666;
-  margin: 10px 0;
-}
-
-.csv-instructions code {
-  background: #e9ecef;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-family: 'Courier New', monospace;
-  color: #c7254e;
-}
-
-.csv-instructions pre {
-  background: #2d2d2d;
-  color: #f8f8f2;
-  padding: 15px;
-  border-radius: 8px;
-  overflow-x: auto;
-  font-size: 0.9rem;
-  margin-top: 10px;
-}
-
-.csv-form .form-group {
   margin-bottom: 20px;
 }
 
-.csv-form label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #333;
+.bulk-entry-form {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.csv-form input[type="file"] {
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.products-table {
   width: 100%;
-  padding: 10px;
-  border: 2px dashed #10b981;
-  background: #f0fdf4;
-  cursor: pointer;
+  border-collapse: collapse;
+  background: white;
   border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.csv-form input[type="file"]:hover {
-  background: #dcfce7;
+.products-table th {
+  background: #10b981;
+  color: white;
+  text-align: left;
+  padding: 12px 15px;
+  font-weight: 600;
+}
+
+.products-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.products-table tr:last-child td {
+  border-bottom: none;
+}
+
+.products-table tr:hover {
+  background: #f9fafb;
+}
+
+.table-input,
+.table-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: border-color 0.3s;
+}
+
+.table-input:focus,
+.table-select:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.table-checkbox {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.btn-remove-row {
+  background: #fee2e2;
+  color: #ef4444;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.btn-remove-row:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+.bulk-entry-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.btn-add-row {
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.btn-add-row:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.bulk-submit-section {
+  margin-left: auto;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive styles for bulk entry */
+@media (max-width: 768px) {
+  .bulk-entry-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .btn-add-row,
+  .bulk-submit-section {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .products-table {
+    font-size: 0.85rem;
+  }
+  
+  .products-table th,
+  .products-table td {
+    padding: 8px 10px;
+  }
+  
+  .table-input,
+  .table-select {
+    padding: 6px 8px;
+    font-size: 0.85rem;
+  }
 }
 
 /* Products Section */

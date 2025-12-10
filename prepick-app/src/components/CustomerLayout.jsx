@@ -1,5 +1,6 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import logo from '../assets/Logo.png';
 import '../styles/Layout.css';
 
 const CustomerLayout = () => {
@@ -18,6 +19,7 @@ const CustomerLayout = () => {
     <div className="layout">
       <nav className="navbar">
         <div className="nav-brand">
+          <img src={logo} alt="PrePick Logo" className="nav-brand-img" />
           <h1>PrePick</h1>
           <span className="user-role">Customer</span>
         </div>
@@ -27,19 +29,23 @@ const CustomerLayout = () => {
             className={`nav-link ${isActive('/customer/shops') ? 'active' : ''}`}
             onClick={() => navigate('/customer/shops')}
           >
-            Shops
+            <span>🏪</span>
+            <span>Shops</span>
           </button>
           <button
             className={`nav-link ${isActive('/customer/orders') ? 'active' : ''}`}
             onClick={() => navigate('/customer/orders')}
           >
-            My Orders
+            <span>📦</span>
+            <span>My Orders</span>
           </button>
           <button
             className={`nav-link cart-link ${isActive('/customer/cart') ? 'active' : ''}`}
             onClick={() => navigate('/customer/cart')}
           >
-            Cart {cart.length > 0 && <span className="cart-badge">{cart.length}</span>}
+            <span>🛒</span>
+            <span>Cart</span>
+            {cart.length > 0 && <span className="cart-badge">{cart.length}</span>}
           </button>
         </div>
 
@@ -53,7 +59,8 @@ const CustomerLayout = () => {
             👤
           </button>
           <button className="logout-btn" onClick={handleLogout}>
-            Logout
+            <span>🚪</span>
+            <span>Logout</span>
           </button>
         </div>
       </nav>

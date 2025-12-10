@@ -15,6 +15,7 @@ import CustomerOrders from './pages/CustomerOrders';
 import ShopDashboard from './pages/ShopDashboard';
 import NotificationCenter from './components/NotificationCenter';
 import './App.css';
+import './styles/components.css';
 
 function ProtectedRoute({ children, allowedRole }) {
   const { currentUser, authLoading } = useApp();

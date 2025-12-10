@@ -1,5 +1,6 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import logo from '../assets/Logo.png';
 import '../styles/Layout.css';
 
 const ShopLayout = () => {
@@ -20,6 +21,7 @@ const ShopLayout = () => {
     <div className="layout">
       <nav className="navbar shop-navbar">
         <div className="nav-brand">
+          <img src={logo} alt="PrePick Logo" className="nav-brand-img" />
           <h1>PrePick</h1>
           <span className="user-role">Shop Owner</span>
         </div>
@@ -29,7 +31,8 @@ const ShopLayout = () => {
             className={`nav-link ${isActive('/shop/dashboard') ? 'active' : ''}`}
             onClick={() => navigate('/shop/dashboard')}
           >
-            Dashboard
+            <span>📊</span>
+            <span>Dashboard</span>
           </button>
         </div>
 
@@ -43,7 +46,8 @@ const ShopLayout = () => {
             👤
           </button>
           <button className="logout-btn" onClick={handleLogout}>
-            Logout
+            <span>🚪</span>
+            <span>Logout</span>
           </button>
         </div>
       </nav>

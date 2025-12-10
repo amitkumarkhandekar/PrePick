@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { addProduct, addBulkProducts } from '../services/databaseService';
+import BulkProductEntry from './BulkProductEntry';
 
 const ProductManagement = ({ shopId, onProductAdded }) => {
-  const [activeMode, setActiveMode] = useState('manual'); // 'manual' or 'csv'
+  const [activeMode, setActiveMode] = useState('manual'); // 'manual' or 'bulk'
   const [formData, setFormData] = useState({
     name: '',
     price: '',
     category: 'Groceries',
     inStock: true
   });
-  const [csvFile, setCsvFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
@@ -62,60 +62,6 @@ const ProductManagement = ({ shopId, onProductAdded }) => {
     }
   };
 
-  const handleCSVUpload = async (e) => {
-    e.preventDefault();
-    if (!csvFile) {
-      setMessage({ type: 'error', text: 'Please select a CSV file' });
-      return;
-    }
-
-    setLoading(true);
-    setMessage({ type: '', text: '' });
-
-    try {
-      const text = await csvFile.text();
-      const lines = text.trim().split('\n');
-      const headers = lines[0].split(',').map(h => h.trim());
-
-      // Parse CSV data
-      const products = [];
-      for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(',').map(v => v.trim());
-        if (values.length >= 3) {
-          products.push({
-            name: values[0],
-            price: parseFloat(values[1]),
-            category: values[2] || 'Other',
-            inStock: values[3] === 'false' ? false : true
-          });
-        }
-      }
-
-      if (products.length === 0) {
-        setMessage({ type: 'error', text: 'No valid products found in CSV' });
-        return;
-      }
-
-      await addBulkProducts(shopId, products);
-      setMessage({ 
-        type: 'success', 
-        text: `Successfully added ${products.length} products!` 
-      });
-      setCsvFile(null);
-      e.target.reset();
-      
-      // Notify parent to refresh product list
-      if (onProductAdded) {
-        onProductAdded();
-      }
-    } catch (error) {
-      console.error('Error uploading CSV:', error);
-      setMessage({ type: 'error', text: 'Failed to upload CSV. Please try again.' });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="product-management">
       <div className="mode-toggle">
@@ -126,10 +72,10 @@ const ProductManagement = ({ shopId, onProductAdded }) => {
           Add Manually
         </button>
         <button
-          className={`mode-btn ${activeMode === 'csv' ? 'active' : ''}`}
-          onClick={() => setActiveMode('csv')}
+          className={`mode-btn ${activeMode === 'bulk' ? 'active' : ''}`}
+          onClick={() => setActiveMode('bulk')}
         >
-          Upload CSV
+          Bulk Entry
         </button>
       </div>
 
@@ -201,37 +147,7 @@ const ProductManagement = ({ shopId, onProductAdded }) => {
           </button>
         </form>
       ) : (
-        <div className="csv-upload">
-          <div className="csv-instructions">
-            <h4>CSV Format Instructions:</h4>
-            <p>Your CSV file should have the following columns:</p>
-            <code>name,price,category,inStock</code>
-            <p><strong>Example:</strong></p>
-            <pre>
-name,price,category,inStock{'\n'}
-Rice (1kg),60,Groceries,true{'\n'}
-Milk (1L),65,Dairy,true{'\n'}
-Bread,35,Bakery,false
-            </pre>
-          </div>
-
-          <form onSubmit={handleCSVUpload} className="csv-form">
-            <div className="form-group">
-              <label htmlFor="csvFile">Select CSV File *</label>
-              <input
-                type="file"
-                id="csvFile"
-                accept=".csv"
-                onChange={(e) => setCsvFile(e.target.files[0])}
-                required
-              />
-            </div>
-
-            <button type="submit" className="submit-btn" disabled={loading}>
-              {loading ? 'Uploading...' : 'Upload CSV'}
-            </button>
-          </form>
-        </div>
+        <BulkProductEntry shopId={shopId} onProductsAdded={onProductAdded} />
       )}
     </div>
   );

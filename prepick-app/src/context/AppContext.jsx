@@ -3,7 +3,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth, database } from '../config/firebase';
 import { ref, query, orderByChild, equalTo, onValue } from 'firebase/database';
 import { getUserProfile } from '../services/authService';
-import { listenToShops } from '../services/databaseService';
+import { listenToShops, listenToProducts as listenToShopProducts } from '../services/databaseService';
 import { createOrder as createOrderInDB, updateOrder as updateOrderInDB } from '../services/databaseService';
 
 const AppContext = createContext();
@@ -135,6 +135,11 @@ export const AppProvider = ({ children }) => {
     return () => unsubscribe();
   }, [currentUser]);
 
+  // Function to listen to products for a specific shop
+  const listenToProducts = (shopId, callback) => {
+    return listenToShopProducts(shopId, callback);
+  };
+
   // Logout function - now handled by Firebase
   const logout = async () => {
     try {
@@ -233,7 +238,8 @@ export const AppProvider = ({ children }) => {
     createOrder,
     updateOrder,
     toggleFavorite,
-    setCurrentUser
+    setCurrentUser,
+    listenToProducts // Add the listenToProducts function to the context
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import OrderReceipt from '../components/OrderReceipt';
+import CustomItemEntry from '../components/CustomItemEntry';
 import '../styles/Cart.css';
 
 const Cart = () => {
@@ -32,7 +33,19 @@ const Cart = () => {
     return acc;
   }, {});
 
-  const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  // Separate regular items and custom items
+  const separateItemsByType = (items) => {
+    const regularItems = items.filter(item => !item.isCustom);
+    const customItems = items.filter(item => item.isCustom);
+    return { regularItems, customItems };
+  };
+
+  const totalAmount = cart.reduce((sum, item) => {
+    // For regular items, use their price
+    // For custom items, they contribute 0 to the total since price is unknown
+    return sum + (item.isCustom ? 0 : (item.price * item.quantity));
+  }, 0);
+  
   const partialPayment = Math.ceil(totalAmount / 2); // 50% upfront payment
 
   const handleCheckout = () => {
@@ -41,7 +54,11 @@ const Cart = () => {
 
   const handlePlaceOrder = async (shopId) => {
     const shopItems = itemsByShop[shopId];
-    const shopTotal = shopItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const { regularItems, customItems } = separateItemsByType(shopItems);
+    
+    // Calculate total for regular items only
+    const regularItemsTotal = regularItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
     const shop = shops.find(s => s.id === shopId);
 
     const orderData = {
@@ -56,9 +73,10 @@ const Cart = () => {
         name: item.name,
         quantity: item.quantity,
         price: item.price,
+        isCustom: item.isCustom || false // Include custom flag
       })),
-      totalAmount: shopTotal,
-      partialPayment: Math.ceil(shopTotal / 2),
+      totalAmount: regularItemsTotal, // Only regular items contribute to calculated total
+      partialPayment: Math.ceil(regularItemsTotal / 2),
       paymentStatus: 'partial',
       orderStatus: 'pending',
     };
@@ -90,7 +108,11 @@ const Cart = () => {
 
       {Object.entries(itemsByShop).map(([shopId, items]) => {
         const shop = shops.find(s => s.id === shopId);
-        const shopTotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const { regularItems, customItems } = separateItemsByType(items);
+        
+        // Calculate totals separately
+        const regularItemsTotal = regularItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const customItemsCount = customItems.length;
 
         return (
           <div key={shopId} className="shop-cart-section">
@@ -99,60 +121,121 @@ const Cart = () => {
               <span className="shop-category">{shop.category}</span>
             </div>
 
+            {/* Regular Items */}
+            {regularItems.length > 0 && (
+              <div className="cart-items">
+                <h4>Regular Items</h4>
+                {regularItems.map(item => (
+                  <div key={item.id} className="cart-item">
+                    <div className="item-info">
+                      <h4>{item.name}</h4>
+                      <p className="item-price">₹{item.price} each</p>
+                    </div>
+
+                    <div className="item-controls">
+                      <div className="quantity-controls">
+                        <button
+                          onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
+                          className="qty-btn"
+                        >
+                          −
+                        </button>
+                        <span className="quantity">{item.quantity}</span>
+                        <button
+                          onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
+                          className="qty-btn"
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <div className="item-total">
+                        <span className="total-label">Total:</span>
+                        <span className="total-amount">₹{item.price * item.quantity}</span>
+                      </div>
+
+                      <button
+                        onClick={() => removeFromCart(item.id)}
+                        className="remove-btn"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Custom Items Section */}
             <div className="cart-items">
-              {items.map(item => (
-                <div key={item.id} className="cart-item">
-                  <div className="item-info">
-                    <h4>{item.name}</h4>
-                    <p className="item-price">₹{item.price} each</p>
-                  </div>
-
-                  <div className="item-controls">
-                    <div className="quantity-controls">
-                      <button
-                        onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
-                        className="qty-btn"
-                      >
-                        −
-                      </button>
-                      <span className="quantity">{item.quantity}</span>
-                      <button
-                        onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
-                        className="qty-btn"
-                      >
-                        +
-                      </button>
+              <h4>Custom Requests {customItemsCount > 0 ? `(${customItemsCount})` : ''}</h4>
+              
+              {customItems.length > 0 ? (
+                customItems.map(item => (
+                  <div key={item.id} className="cart-item custom-cart-item">
+                    <div className="item-info">
+                      <h4>{item.name}</h4>
+                      <p className="item-price">Price to be determined by shop</p>
                     </div>
 
-                    <div className="item-total">
-                      <span className="total-label">Total:</span>
-                      <span className="total-amount">₹{item.price * item.quantity}</span>
-                    </div>
+                    <div className="item-controls">
+                      <div className="quantity-controls">
+                        <button
+                          onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
+                          className="qty-btn"
+                        >
+                          −
+                        </button>
+                        <span className="quantity">{item.quantity}</span>
+                        <button
+                          onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
+                          className="qty-btn"
+                        >
+                          +
+                        </button>
+                      </div>
 
-                    <button
-                      onClick={() => removeFromCart(item.id)}
-                      className="remove-btn"
-                    >
-                      Remove
-                    </button>
+                      <div className="item-total">
+                        <span className="total-label">Total:</span>
+                        <span className="total-amount">₹--</span>
+                      </div>
+
+                      <button
+                        onClick={() => removeFromCart(item.id)}
+                        className="remove-btn"
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="no-custom-items">No custom items added yet</p>
+              )}
+              
+              {/* Add Custom Item Entry */}
+              <CustomItemEntry shopId={shopId} shopName={shop.name} />
             </div>
 
             <div className="shop-cart-footer">
               <div className="shop-total">
-                <span>Subtotal ({items.length} items):</span>
-                <span className="amount">₹{shopTotal}</span>
+                <span>Regular Items Subtotal ({regularItems.length} items):</span>
+                <span className="amount">₹{regularItemsTotal}</span>
               </div>
+              {customItemsCount > 0 && (
+                <div className="shop-total">
+                  <span>Custom Items ({customItemsCount} items):</span>
+                  <span className="amount">Price to be determined</span>
+                </div>
+              )}
               <div className="partial-payment-info">
-                <span>Partial Payment (50%):</span>
-                <span className="amount">₹{Math.ceil(shopTotal / 2)}</span>
+                <span>Partial Payment (50% of regular items):</span>
+                <span className="amount">₹{Math.ceil(regularItemsTotal / 2)}</span>
               </div>
               {showCheckout && (
                 <div className="checkout-section">
                   <p className="payment-instruction">
-                    Pay ₹{Math.ceil(shopTotal / 2)} via Google Pay to: <strong>{shop.gpayNumber}</strong>
+                    Pay ₹{Math.ceil(regularItemsTotal / 2)} via Google Pay to: <strong>{shop.gpayNumber}</strong>
                   </p>
                   <button
                     onClick={() => handlePlaceOrder(shopId)}
@@ -170,7 +253,7 @@ const Cart = () => {
       <div className="cart-footer">
         <div className="total-summary">
           <div className="summary-row">
-            <span>Total Amount:</span>
+            <span>Regular Items Total:</span>
             <span className="amount">₹{totalAmount}</span>
           </div>
           <div className="summary-row highlight">
@@ -178,7 +261,7 @@ const Cart = () => {
             <span className="amount">₹{partialPayment}</span>
           </div>
           <p className="payment-note">
-            Pay 50% upfront. Remaining amount to be paid at pickup.
+            Pay 50% upfront for regular items. Remaining amount and custom item prices to be paid at pickup.
           </p>
         </div>
 
