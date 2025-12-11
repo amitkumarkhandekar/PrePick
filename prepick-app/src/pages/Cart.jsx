@@ -49,6 +49,17 @@ const Cart = () => {
   const partialPayment = Math.ceil(totalAmount / 2); // 50% upfront payment
 
   const handleCheckout = () => {
+    // Check if any shop in the cart is offline
+    const offlineShops = Object.keys(itemsByShop).map(shopId => 
+      shops.find(s => s.id === shopId)
+    ).filter(shop => shop && shop.status === 'offline');
+    
+    if (offlineShops.length > 0) {
+      const shopNames = offlineShops.map(shop => shop.name).join(', ');
+      alert(`The following shops are currently offline and not accepting orders: ${shopNames}. Please remove items from these shops or try again later.`);
+      return;
+    }
+    
     setShowCheckout(true);
   };
 
@@ -60,6 +71,12 @@ const Cart = () => {
     const regularItemsTotal = regularItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     
     const shop = shops.find(s => s.id === shopId);
+    
+    // Check if shop is offline
+    if (shop && shop.status === 'offline') {
+      alert('This shop is currently offline and not accepting orders. Please try again later or select another shop.');
+      return;
+    }
 
     const orderData = {
       customerId: currentUser.uid,
@@ -240,8 +257,9 @@ const Cart = () => {
                   <button
                     onClick={() => handlePlaceOrder(shopId)}
                     className="place-order-btn"
+                    disabled={shop && shop.status === 'offline'}
                   >
-                    Confirm Order
+                    {shop && shop.status === 'offline' ? 'Shop Offline' : 'Confirm Order'}
                   </button>
                 </div>
               )}
@@ -266,7 +284,14 @@ const Cart = () => {
         </div>
 
         {!showCheckout && (
-          <button onClick={handleCheckout} className="checkout-btn">
+          <button 
+            onClick={handleCheckout} 
+            className="checkout-btn"
+            disabled={Object.keys(itemsByShop).some(shopId => {
+              const shop = shops.find(s => s.id === shopId);
+              return shop && shop.status === 'offline';
+            })}
+          >
             Proceed to Checkout
           </button>
         )}

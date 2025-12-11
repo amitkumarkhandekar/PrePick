@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import { getShopsByOwner, getProductsByShop, updateProduct, deleteProduct, getOrdersByShop, updateOrder as updateOrderInDB, listenToOrders } from '../services/databaseService';
+import { getShopsByOwner, getProductsByShop, updateProduct, deleteProduct, getOrdersByShop, updateOrder as updateOrderInDB, listenToOrders, updateShop } from '../services/databaseService';
 import ProductManagement from '../components/ProductManagement';
 import PrintableOrderList from '../components/PrintableOrderList';
 import '../styles/ShopDashboard.css';
@@ -42,7 +42,8 @@ const ShopDashboard = () => {
                 ownerId: currentUser.uid,
                 ownerName: currentUser.name,
                 ownerEmail: currentUser.email,
-                verified: false
+                verified: false,
+                status: 'online'
               });
               
               // Fetch the newly created shop
@@ -209,6 +210,24 @@ const ShopDashboard = () => {
     }
   };
 
+  const handleToggleShopStatus = async () => {
+    if (!userShop) return;
+    
+    try {
+      const newStatus = userShop.status === 'online' ? 'offline' : 'online';
+      await updateShop(userShop.id, { status: newStatus });
+      
+      // Update local state
+      setUserShop({ ...userShop, status: newStatus });
+      
+      // Show confirmation
+      alert(`Shop is now ${newStatus}!`);
+    } catch (error) {
+      console.error('Error updating shop status:', error);
+      alert('Failed to update shop status');
+    }
+  };
+
   const refreshProducts = async () => {
     if (!userShop?.id) return;
     try {
@@ -248,6 +267,12 @@ const ShopDashboard = () => {
           ) : (
             <span className="pending-verification-badge">Pending Verification</span>
           )}
+          <button 
+            className={`status-toggle-btn ${userShop.status === 'online' ? 'online' : 'offline'}`}
+            onClick={handleToggleShopStatus}
+          >
+            {userShop.status === 'online' ? '🟢 Online' : '🔴 Offline'}
+          </button>
         </div>
       </div>
 

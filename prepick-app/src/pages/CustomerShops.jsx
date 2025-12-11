@@ -42,7 +42,12 @@ const CustomerShops = () => {
             <div className="shop-header">
               <div>
                 <h3>{shop.name}</h3>
-                <span className="shop-category">{shop.category}</span>
+                <div className="shop-meta">
+                  <span className="shop-category">{shop.category}</span>
+                  <span className={`shop-status-badge ${shop.status === 'online' ? 'online' : 'offline'}`}>
+                    {shop.status === 'online' ? '🟢 Online' : '🔴 Offline'}
+                  </span>
+                </div>
               </div>
               <button
                 className={`favorite-btn ${isFavorite(shop.id) ? 'active' : ''}`}
@@ -64,9 +69,15 @@ const CustomerShops = () => {
               >
                 📞 Call Shop
               </button>
-              <button className="browse-btn">
-                Browse Catalog →
-              </button>
+              {shop.status === 'offline' ? (
+                <button className="browse-btn" disabled>
+                  Shop Offline
+                </button>
+              ) : (
+                <button className="browse-btn">
+                  Browse Catalog →
+                </button>
+              )}
             </div>
           </div>
         ))}

@@ -64,7 +64,8 @@ const ShopSetup = () => {
         ownerId: currentUser.uid,
         ownerName: currentUser.name,
         ownerEmail: currentUser.email,
-        verified: false
+        verified: false,
+        status: 'online'
       });
 
       console.log('Shop created successfully:', shopId);

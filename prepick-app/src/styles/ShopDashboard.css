@@ -44,6 +44,36 @@
   border: 1px solid var(--secondary-light);
 }
 
+.status-toggle-btn {
+  background: var(--gray-200);
+  color: var(--gray-800);
+  border: none;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-medium);
+  margin-left: var(--spacing-4);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.status-toggle-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.status-toggle-btn.online {
+  background: var(--success);
+  color: var(--white);
+}
+
+.status-toggle-btn.offline {
+  background: var(--error);
+  color: var(--white);
+}
+
 .dashboard-tabs {
   display: flex;
   gap: var(--spacing-2);

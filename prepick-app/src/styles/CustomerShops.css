@@ -77,6 +77,35 @@
   letter-spacing: 0.025em;
 }
 
+.shop-status-badge {
+  display: inline-block;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-left: var(--spacing-2);
+}
+
+.shop-status-badge.online {
+  background: var(--success-bg);
+  color: var(--success-dark);
+  border: 1px solid var(--success-light);
+}
+
+.shop-status-badge.offline {
+  background: var(--error-bg);
+  color: var(--error-dark);
+  border: 1px solid var(--error-light);
+}
+
+.shop-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-1);
+}
+
 .favorite-btn {
   background: transparent;
   border: none;
@@ -179,6 +208,15 @@
 .browse-btn:active {
   transform: translateY(0);
   box-shadow: var(--shadow-md);
+}
+
+.browse-btn:disabled {
+  background: var(--gray-400);
+  border-color: var(--gray-400);
+  color: var(--gray-200);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .no-shops {

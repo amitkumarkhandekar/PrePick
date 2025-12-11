@@ -70,6 +70,9 @@ const ShopCatalog = () => {
           <h2>{shop.name}</h2>
           <div className="shop-meta">
             <span className="shop-category">{shop.category}</span>
+            <span className={`shop-status-badge ${shop.status === 'online' ? 'online' : 'offline'}`}>
+              {shop.status === 'online' ? '🟢 Online' : '🔴 Offline'}
+            </span>
             <span className="shop-phone">📞 {shop.phone}</span>
           </div>
           <p className="shop-address">📍 {shop.address}</p>
@@ -132,12 +135,16 @@ const ShopCatalog = () => {
                     ✓ In Cart ({getCartQuantity(product.id)})
                   </div>
                 ) : null}
-                <button
-                  className="add-to-cart-btn"
-                  onClick={() => handleAddToCart(product)}
-                >
-                  Add to Cart
-                </button>
+                {shop.status === 'offline' ? (
+                  <div className="out-of-stock-badge">Shop Offline</div>
+                ) : (
+                  <button
+                    className="add-to-cart-btn"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    Add to Cart
+                  </button>
+                )}
               </div>
             ) : (
               <div className="out-of-stock-badge">Out of Stock</div>
@@ -158,9 +165,15 @@ const ShopCatalog = () => {
             <span>{cart.length} items in cart</span>
             <span className="cart-total">Total: ₹{cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}</span>
           </div>
-          <button className="view-cart-btn" onClick={() => navigate('/customer/cart')}>
-            View Cart & Checkout
-          </button>
+          {shop.status === 'offline' ? (
+            <button className="view-cart-btn" disabled>
+              Shop Offline
+            </button>
+          ) : (
+            <button className="view-cart-btn" onClick={() => navigate('/customer/cart')}>
+              View Cart & Checkout
+            </button>
+          )}
         </div>
       )}
     </div>

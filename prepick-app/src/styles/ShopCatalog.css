@@ -59,6 +59,26 @@
   letter-spacing: 0.025em;
 }
 
+.shop-status-badge {
+  display: inline-block;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.shop-status-badge.online {
+  background: var(--success-bg);
+  color: var(--success-dark);
+  border: 1px solid var(--success-light);
+}
+
+.shop-status-badge.offline {
+  background: var(--error-bg);
+  color: var(--error-dark);
+  border: 1px solid var(--error-light);
+}
+
 .shop-phone {
   color: var(--gray-600);
   font-size: var(--font-size-sm);
@@ -242,6 +262,14 @@
   box-shadow: var(--shadow-lg);
 }
 
+.add-to-cart-btn:disabled {
+  background: var(--gray-400);
+  color: var(--gray-200);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .out-of-stock-badge {
   background: var(--error);
   color: var(--white);
@@ -308,6 +336,14 @@
   background: var(--accent-dark);
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
+}
+
+.view-cart-btn:disabled {
+  background: var(--gray-400);
+  color: var(--gray-200);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .shop-not-found {

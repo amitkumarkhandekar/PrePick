@@ -10,7 +10,8 @@ export const createShop = async (shopData) => {
       ...shopData,
       id: shopRef.key,
       createdAt: new Date().toISOString(),
-      verified: false
+      verified: false,
+      status: 'online' // Default status is online
     });
     return shopRef.key;
   } catch (error) {

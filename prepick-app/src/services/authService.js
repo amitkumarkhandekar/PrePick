@@ -60,7 +60,8 @@ export const signUpWithEmail = async (email, password, name, role = 'customer', 
           ownerId: user.uid,
           ownerName: name,
           ownerEmail: user.email,
-          verified: false
+          verified: false,
+          status: 'online'
         });
       } catch (shopError) {
         console.error('Error creating shop during signup:', shopError);
