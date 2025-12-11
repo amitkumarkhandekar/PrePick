@@ -1072,6 +1072,35 @@ a:hover {
   }
 }
 
+/* Additional responsive utilities */
+@media (max-width: 576px) {
+  .container, .container-fluid {
+    padding-right: var(--spacing-3);
+    padding-left: var(--spacing-3);
+  }
+}
+
+@media (max-width: 400px) {
+  .container, .container-fluid {
+    padding-right: var(--spacing-2);
+    padding-left: var(--spacing-2);
+  }
+  
+  .form-control {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+  
+  .form-label {
+    font-size: var(--font-size-xs);
+  }
+  
+  .btn {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+}
+
 /* Responsive Utilities */
 @media (max-width: 768px) {
   .btn {
@@ -1093,6 +1122,15 @@ a:hover {
   
   h3 {
     font-size: var(--font-size-xl);
+  }
+  
+  .form-control {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-sm);
+  }
+  
+  .form-label {
+    font-size: var(--font-size-xs);
   }
 }
 
@@ -1145,6 +1183,40 @@ a:hover {
   .mr-0-xs {
     margin-right: 0 !important;
   }
+  
+  .flex-column-xs {
+    flex-direction: column !important;
+  }
+  
+  .align-items-start-xs {
+    align-items: flex-start !important;
+  }
+  
+  .w-100-xs {
+    width: 100% !important;
+  }
+  
+  .gap-2-xs {
+    gap: var(--spacing-2) !important;
+  }
+  
+  .gap-3-xs {
+    gap: var(--spacing-3) !important;
+  }
+  
+  .form-control {
+    padding: var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+  
+  .form-label {
+    font-size: var(--font-size-xs);
+  }
+  
+  .btn {
+    padding: var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
 }
 
 @media (max-width: 768px) {
@@ -1194,6 +1266,26 @@ a:hover {
   
   .mr-0-sm {
     margin-right: 0 !important;
+  }
+  
+  .flex-column-sm {
+    flex-direction: column !important;
+  }
+  
+  .align-items-start-sm {
+    align-items: flex-start !important;
+  }
+  
+  .w-100-sm {
+    width: 100% !important;
+  }
+  
+  .gap-3-sm {
+    gap: var(--spacing-3) !important;
+  }
+  
+  .gap-4-sm {
+    gap: var(--spacing-4) !important;
   }
 }
 

@@ -270,3 +270,155 @@
     width: 100%;
   }
 }
+
+@media (max-width: 600px) {
+  .customer-orders {
+    padding: var(--spacing-3);
+  }
+  
+  .customer-orders h2 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-1);
+  }
+  
+  .subtitle {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-3);
+  }
+  
+  .order-card {
+    margin-bottom: var(--spacing-3);
+  }
+  
+  .order-header {
+    padding: var(--spacing-3);
+    gap: var(--spacing-2);
+  }
+  
+  .order-header h3 {
+    font-size: var(--font-size-base);
+  }
+  
+  .order-date {
+    font-size: var(--font-size-xs);
+  }
+  
+  .status-badge {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-1) var(--spacing-2);
+  }
+  
+  .order-items {
+    padding: var(--spacing-3);
+  }
+  
+  .order-items h4 {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-2);
+  }
+  
+  .order-items ul {
+    padding-left: var(--spacing-3);
+  }
+  
+  .order-items li {
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-1);
+    padding: var(--spacing-1) 0;
+  }
+  
+  .order-summary {
+    padding: var(--spacing-3);
+  }
+  
+  .summary-row {
+    margin-bottom: var(--spacing-1);
+  }
+  
+  .ready-by {
+    padding: var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+  
+  .pickup-alert {
+    padding: var(--spacing-3);
+    font-size: var(--font-size-sm);
+  }
+  
+  .order-actions {
+    padding: var(--spacing-3);
+    gap: var(--spacing-2);
+  }
+  
+  .call-shop-btn, .print-btn {
+    padding: var(--spacing-2);
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 400px) {
+  .customer-orders {
+    padding: var(--spacing-2);
+  }
+  
+  .customer-orders h2 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .subtitle {
+    font-size: var(--font-size-sm);
+  }
+  
+  .order-header {
+    padding: var(--spacing-2);
+  }
+  
+  .order-header h3 {
+    font-size: var(--font-size-sm);
+  }
+  
+  .order-date {
+    font-size: var(--font-size-xs);
+  }
+  
+  .status-badge {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-1);
+  }
+  
+  .order-items {
+    padding: var(--spacing-2);
+  }
+  
+  .order-items h4 {
+    font-size: var(--font-size-xs);
+  }
+  
+  .order-summary {
+    padding: var(--spacing-2);
+  }
+  
+  .summary-row {
+    flex-direction: column;
+    gap: var(--spacing-1);
+    text-align: center;
+  }
+  
+  .ready-by {
+    font-size: var(--font-size-xs);
+  }
+  
+  .pickup-alert {
+    padding: var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+  
+  .order-actions {
+    padding: var(--spacing-2);
+  }
+  
+  .call-shop-btn, .print-btn {
+    padding: var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+}

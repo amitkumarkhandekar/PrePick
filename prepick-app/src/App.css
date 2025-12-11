@@ -1,8 +1,13 @@
 @import './styles/theme.css';
 
+body {
+  overflow-x: hidden;
+}
+
 #root {
   width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Global Responsive Utilities */

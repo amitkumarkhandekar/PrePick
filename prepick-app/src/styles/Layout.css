@@ -13,12 +13,16 @@
   border-bottom: 1px solid var(--gray-200);
   backdrop-filter: blur(10px);
   background-color: rgba(255, 255, 255, 0.95);
+  flex-wrap: nowrap;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .nav-brand {
   display: flex;
   align-items: center;
   gap: var(--spacing-3);
+  flex-shrink: 0;
 }
 
 .nav-brand h1 {
@@ -59,6 +63,7 @@
 .nav-links {
   display: flex;
   gap: var(--spacing-1);
+  flex-shrink: 0;
 }
 
 .nav-link {
@@ -115,15 +120,18 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 .user-name, .shop-name {
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-sm);
-  max-width: 120px;
+  max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex-shrink: 1;
 }
 
 .profile-btn {
@@ -231,9 +239,19 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
+  .navbar {
+    padding: 0 var(--spacing-2);
+    height: calc(var(--spacing-8) * 1.75);
+  }
+  
   .nav-links {
     gap: var(--spacing-1);
+  }
+  
+  .nav-link {
+    padding: var(--spacing-2);
+    font-size: var(--font-size-xs);
   }
   
   .nav-link span:last-child {
@@ -242,10 +260,31 @@
   
   .nav-link span:first-child {
     margin-right: 0;
+    font-size: var(--font-size-base);
   }
   
   .nav-user {
-    gap: var(--spacing-2);
+    gap: var(--spacing-1);
+  }
+  
+  .user-name, .shop-name {
+    font-size: var(--font-size-xs);
+    max-width: calc(var(--spacing-5) * 6);
+  }
+  
+  .profile-btn {
+    width: calc(var(--spacing-5) * 2);
+    height: calc(var(--spacing-5) * 2);
+    font-size: var(--font-size-sm);
+  }
+  
+  .logout-btn {
+    padding: var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+  
+  .logout-btn span:last-child {
+    display: none;
   }
   
   .user-role {
@@ -256,3 +295,100 @@
     padding: var(--spacing-3);
   }
 }
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 var(--spacing-1);
+    height: calc(var(--spacing-8) * 1.65);
+  }
+  
+  .nav-brand h1 {
+    font-size: var(--font-size-md);
+  }
+  
+  .nav-links {
+    gap: var(--spacing-1);
+  }
+  
+  .nav-link {
+    padding: var(--spacing-1) var(--spacing-2);
+  }
+  
+  .nav-link span:first-child {
+    font-size: var(--font-size-sm);
+  }
+  
+  .nav-user {
+    gap: var(--spacing-1);
+  }
+  
+  .user-name {
+    max-width: calc(var(--spacing-5) * 4);
+  }
+  
+  .profile-btn {
+    width: calc(var(--spacing-5) * 1.75);
+    height: calc(var(--spacing-5) * 1.75);
+    font-size: var(--font-size-xs);
+  }
+  
+  .logout-btn {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+  
+  .main-content {
+    padding: var(--spacing-2);
+  }
+}
+
+@media (max-width: 400px) {
+  .navbar {
+    padding: 0 var(--spacing-1);
+    height: calc(var(--spacing-8) * 1.5);
+  }
+  
+  .nav-brand {
+    gap: var(--spacing-2);
+  }
+  
+  .nav-brand h1 {
+    font-size: var(--font-size-sm);
+  }
+  
+  .nav-links {
+    gap: var(--spacing-1);
+  }
+  
+  .nav-link {
+    padding: var(--spacing-1);
+  }
+  
+  .nav-link span:first-child {
+    font-size: var(--font-size-xs);
+  }
+  
+  .nav-user {
+    gap: var(--spacing-1);
+  }
+  
+  .user-name {
+    display: none;
+  }
+  
+  .profile-btn {
+    width: calc(var(--spacing-5) * 1.5);
+    height: calc(var(--spacing-5) * 1.5);
+    font-size: var(--font-size-xs);
+  }
+  
+  .logout-btn {
+    padding: var(--spacing-1);
+    min-width: 30px;
+  }
+  
+  .logout-btn span:first-child {
+    font-size: var(--font-size-xs);
+  }
+}
+
